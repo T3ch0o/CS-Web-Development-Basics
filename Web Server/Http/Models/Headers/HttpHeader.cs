@@ -1,20 +1,16 @@
 ﻿namespace Http.Models.Headers
 {
-    public class HttpHeader
+    public readonly struct HttpHeader
     {
-        public HttpHeader()
-        {
-        }
-
         public HttpHeader(string name, string value)
         {
             Name = name;
             Value = value;
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Value { get; set; }
+        public string Value { get; }
 
         public override string ToString()
         {
