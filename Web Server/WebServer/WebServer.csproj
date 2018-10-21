@@ -13,4 +13,8 @@
     <DefineConstants />
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Http\Http.csproj" />
+  </ItemGroup>
+
 </Project>
