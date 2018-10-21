@@ -16,6 +16,12 @@
                 firstCharacter = char.ToUpper(firstCharacter);
             }
 
+            for (int characterIndex = 1; characterIndex < characters.Length; ++characterIndex)
+            {
+                ref char character = ref characters[characterIndex];
+                character = char.ToLower(character);
+            }
+
             return new string(characters);
         }
     }
