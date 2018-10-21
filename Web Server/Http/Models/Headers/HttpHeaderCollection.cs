@@ -32,5 +32,10 @@
             header = null;
             return false;
         }
+
+        public override string ToString()
+        {
+            return string.Join("\r\n", _headers);
+        }
     }
 }
