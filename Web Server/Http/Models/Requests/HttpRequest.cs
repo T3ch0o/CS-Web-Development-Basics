@@ -19,7 +19,7 @@
             Headers = headers;
         }
 
-        internal static HttpRequest Parse(string request)
+        public static HttpRequest Parse(string request)
         {
             string[] requestLines = request.Split(new[] { "\r\n" }, StringSplitOptions.None);
 
