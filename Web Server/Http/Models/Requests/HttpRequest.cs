@@ -21,10 +21,9 @@
 
         public static HttpRequest Parse(string request)
         {
-            string[] requestLines = request.Split(new[] { "\r\n" }, StringSplitOptions.None);
+            string[] requestLines = request.Split("\r\n");
 
-            string[] firstLineComponents = requestLines[0]
-                    .Split(' ');
+            string[] firstLineComponents = requestLines[0].Split(' ');
 
             if (firstLineComponents.Length != 3)
             {
@@ -38,9 +37,14 @@
 
             string url = firstLineComponents[1];
 
-            Uri uri = new Uri(url);
+            string[] pathComponents = url.Split('?');
 
-            string path = uri.AbsolutePath;
+            if (pathComponents.Length > 2)
+            {
+                throw new ArgumentException("HTTP query is invalid", nameof(request));
+            }
+
+            string path = pathComponents[0];
 
             Dictionary<string, object> queryData = null;
 
@@ -56,13 +60,16 @@
                 return new KeyValuePair<string, object>(keyValuePair[0], keyValuePair[1]);
             }
 
+            if (pathComponents.Length == 2)
             {
-                string query = uri.Query;
+                string query = pathComponents[1];
 
-                if (query != string.Empty)
+                if (query.Contains('#'))
                 {
-                    queryData = new Dictionary<string, object>(query.Split('&').Select(ParseQueryString));
+                    query = query.Split('#', 1).Single();
                 }
+
+                queryData = new Dictionary<string, object>(query.Split('&').Select(ParseQueryString));
             }
 
             string protocol = firstLineComponents[2];
@@ -82,12 +89,12 @@
 
                 string line = requestLines[lineIndex];
 
-                if (line == "\r\n")
+                if (line == string.Empty)
                 {
                     break;
                 }
 
-                string[] keyValuePair = line.Split(new[] { ": " }, StringSplitOptions.None);
+                string[] keyValuePair = line.Split(": ", 2);
 
                 if (keyValuePair.Length != 2)
                 {
@@ -107,7 +114,7 @@
             {
                 int formDataLineIndex = lastLineIndex + 1;
 
-                if (requestLines.Length > formDataLineIndex)
+                if (requestLines.Length > formDataLineIndex + 1)
                 {
                     string formDataLine = requestLines[formDataLineIndex];
 
