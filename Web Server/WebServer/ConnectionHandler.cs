@@ -27,26 +27,20 @@
 
         public async Task ProcessRequestAsync()
         {
-            Task<IHttpRequest> requestTask = ReadRequest();
-
-            IHttpRequest request = await requestTask;
-
             IHttpResponse response;
 
-            if (requestTask.IsFaulted)
+            try
             {
-                if (requestTask.Exception.InnerException is ArgumentException)
-                {
-                    response = new HttpResponse(HttpStatusCode.BadRequest);
-                }
-                else
-                {
-                    response = new HttpResponse(HttpStatusCode.InternalServerError);
-                }
-            }
-            else
-            {
+                IHttpRequest request = await ReadRequest();
                 response = _serverRoutingTable.HandleRequest(request);
+            }
+            catch (ArgumentException)
+            {
+                response = new HttpResponse(HttpStatusCode.BadRequest);
+            }
+            catch
+            {
+                response = new HttpResponse(HttpStatusCode.InternalServerError);
             }
 
             await SendResponse(response);
