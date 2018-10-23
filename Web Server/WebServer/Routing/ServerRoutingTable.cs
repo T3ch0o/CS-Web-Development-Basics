@@ -10,17 +10,35 @@
 
     public class ServerRoutingTable
     {
+        private readonly Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> _routes;
+
         public ServerRoutingTable()
         {
-            Routes = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>();
+            _routes = new Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>>();
 
             foreach (HttpRequestMethod httpRequestMethod in Enum.GetValues(typeof(HttpRequestMethod))
                                                                 .Cast<HttpRequestMethod>())
             {
-                Routes[httpRequestMethod] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>();
+                _routes[httpRequestMethod] = new Dictionary<string, Func<IHttpRequest, IHttpResponse>>();
             }
         }
 
-        public Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> Routes { get; }
+        public void RegisterOrOverwriteRoute(HttpRequestMethod httpRequestMethod, string path, Func<IHttpRequest, IHttpResponse> handler)
+        {
+            _routes[httpRequestMethod][path] = handler;
+        }
+
+        public IHttpResponse HandleRequest(IHttpRequest request)
+        {
+            if (_routes.TryGetValue(request.Method, out var pathRoutes)) // PathRoutes is inner path dictionary
+            {
+                if (pathRoutes.TryGetValue(request.Path, out Func<IHttpRequest, IHttpResponse> handler))
+                {
+                    return handler(request);
+                }
+            }
+
+            return new HttpResponse(HttpStatusCode.NotFound);
+        }
     }
 }
