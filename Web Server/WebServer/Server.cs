@@ -29,7 +29,7 @@
             ListenLoop(_cancellationToken).GetAwaiter().GetResult();
         }
 
-        public async Task ListenLoop(CancellationToken cancellationToken)
+        private async Task ListenLoop(CancellationToken cancellationToken)
         {
             while (!_cancellationToken.IsCancellationRequested)
             {
