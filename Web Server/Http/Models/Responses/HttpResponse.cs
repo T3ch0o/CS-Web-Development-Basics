@@ -24,10 +24,12 @@
         {
             byte[] headBytes = Encoding.ASCII.GetBytes(ToString());
 
-            byte[] responseBytes = new byte[headBytes.Length + BodyBytes.Length];
+            if (BodyBytes == null)
+            {
+                return headBytes;
+            }
 
-            headBytes.CopyTo(responseBytes, 0);
-            BodyBytes.CopyTo(responseBytes, headBytes.Length);
+            byte[] responseBytes = new byte[headBytes.Length + BodyBytes.Length];
 
             Buffer.BlockCopy(headBytes, 0, responseBytes, 0, headBytes.Length);
             Buffer.BlockCopy(BodyBytes, 0, responseBytes, headBytes.Length, BodyBytes.Length);
