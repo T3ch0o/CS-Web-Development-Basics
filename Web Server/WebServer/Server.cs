@@ -23,10 +23,10 @@
             _tcpListener = new TcpListener(IPAddress.Parse(ServerIp), port);
         }
 
-        public void Run()
+        public async Task Run()
         {
             _tcpListener.Start();
-            ListenLoop(_cancellationToken).GetAwaiter().GetResult();
+            await ListenLoop(_cancellationToken);
         }
 
         private async Task ListenLoop(CancellationToken cancellationToken)
