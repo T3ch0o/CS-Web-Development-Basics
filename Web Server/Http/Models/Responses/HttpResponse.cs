@@ -18,7 +18,7 @@
 
         public IHttpHeaderCollection Headers { get; } = new HttpHeaderCollection();
 
-        public byte[] BodyBytes { get; set; }
+        public byte[] BodyBytes { get; protected set; }
 
         public byte[] FormResponseBytes()
         {

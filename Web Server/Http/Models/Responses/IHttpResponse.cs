@@ -8,7 +8,7 @@
 
         IHttpHeaderCollection Headers { get; }
 
-        byte[] BodyBytes { get; set; }
+        byte[] BodyBytes { get; }
 
         byte[] FormResponseBytes();
     }
