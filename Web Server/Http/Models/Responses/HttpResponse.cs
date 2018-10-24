@@ -5,6 +5,7 @@
 
     using Http.Configuration;
     using Http.Extensions;
+    using Http.Models.Cookies;
     using Http.Models.Headers;
 
     public class HttpResponse : IHttpResponse
@@ -17,6 +18,8 @@
         public HttpStatusCode StatusCode { get; }
 
         public IHttpHeaderCollection Headers { get; } = new HttpHeaderCollection();
+
+        public IHttpCookieCollection Cookies { get; } = new HttpCookieCollection();
 
         public byte[] BodyBytes { get; protected set; }
 
@@ -39,7 +42,18 @@
 
         public override string ToString()
         {
-            return $"{Constants.HttpProtocolVersion} {StatusCode.ToHttpFormat()}\r\n{Headers}\r\n\r\n";
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendFormat("{0} {1}\r\n{2}\r\n", Constants.HttpProtocolVersion, StatusCode.ToHttpFormat(), Headers);
+
+            if (Cookies.HasCookies())
+            {
+                stringBuilder.AppendFormat("Set-Cookie: {0}\r\n", Cookies);
+            }
+
+            stringBuilder.Append("\r\n");
+
+            return stringBuilder.ToString();
         }
     }
 }
