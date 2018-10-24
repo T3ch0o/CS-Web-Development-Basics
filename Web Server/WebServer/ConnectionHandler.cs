@@ -6,8 +6,10 @@
     using System.Threading.Tasks;
 
     using Http.Models;
+    using Http.Models.Cookies;
     using Http.Models.Requests;
     using Http.Models.Responses;
+    using Http.Models.Session;
 
     using WebServer.Routing;
 
@@ -32,7 +34,12 @@
             try
             {
                 IHttpRequest request = await ReadRequest();
+
+                string sessionId = SetRequestSession(request);
+
                 response = _serverRoutingTable.HandleRequest(request);
+
+                SetResponseSession(response, sessionId);
             }
             catch (ArgumentException)
             {
@@ -72,6 +79,30 @@
         {
             Memory<byte> responseData = new Memory<byte>(response.FormResponseBytes());
             await _clientSocket.SendAsync(responseData, SocketFlags.None);
+        }
+
+        private string SetRequestSession(IHttpRequest httpRequest)
+        {
+            string sessionId;
+
+            if (httpRequest.Cookies.Contains(HttpSessionStorage.SessionCookieKey))
+            {
+                HttpCookie cookie = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
+                sessionId = cookie.Value;
+                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+            }
+            else
+            {
+                sessionId = Guid.NewGuid().ToString();
+                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+            }
+
+            return sessionId;
+        }
+
+        private void SetResponseSession(IHttpResponse response, string sessionId)
+        {
+            response.Cookies.Add(new HttpCookie(HttpSessionStorage.SessionCookieKey, $"{sessionId};HttpOnly=true"));
         }
     }
 }
