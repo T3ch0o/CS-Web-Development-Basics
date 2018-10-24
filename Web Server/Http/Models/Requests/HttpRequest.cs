@@ -5,11 +5,12 @@
     using System.Linq;
 
     using Http.Configuration;
+    using Http.Models.Cookies;
     using Http.Models.Headers;
 
     public class HttpRequest : IHttpRequest
     {
-        private HttpRequest(string path, string url, Dictionary<string, object> formData, Dictionary<string, object> queryData, HttpRequestMethod method, IHttpHeaderCollection headers)
+        private HttpRequest(string path, string url, Dictionary<string, object> formData, Dictionary<string, object> queryData, HttpRequestMethod method, IHttpHeaderCollection headers, IHttpCookieCollection cookies)
         {
             Path = path;
             Url = url;
@@ -17,6 +18,7 @@
             QueryData = queryData;
             Method = method;
             Headers = headers;
+            Cookies = cookies;
         }
 
         public static HttpRequest Parse(string request)
@@ -122,7 +124,17 @@
                 }
             }
 
-            return new HttpRequest(path, url, formData, queryData, method, headers);
+            HttpCookieCollection httpCookieCollection = new HttpCookieCollection();
+
+            if (headers.TryGetHeader("Cookie", out HttpHeader? header))
+            {
+                foreach (string[] parts in header.Value.Value.Split("; ").Select(cookie => cookie.Split('=')))
+                {
+                    httpCookieCollection.Add(new HttpCookie(parts[0], parts[1]));
+                }
+            }
+
+            return new HttpRequest(path, url, formData, queryData, method, headers, httpCookieCollection);
         }
 
         public string Path { get; }
@@ -136,5 +148,7 @@
         public HttpRequestMethod Method { get; }
 
         public IHttpHeaderCollection Headers { get; }
+
+        public IHttpCookieCollection Cookies { get; }
     }
 }
