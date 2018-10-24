@@ -4,6 +4,7 @@
 
     using Http.Models.Cookies;
     using Http.Models.Headers;
+    using Http.Models.Session;
 
     public interface IHttpRequest
     {
@@ -20,5 +21,7 @@
         IHttpHeaderCollection Headers { get; }
 
         IHttpCookieCollection Cookies { get; }
+
+        IHttpSession Session { get; set; }
     }
 }

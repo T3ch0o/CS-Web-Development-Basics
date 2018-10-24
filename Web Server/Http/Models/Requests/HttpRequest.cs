@@ -7,6 +7,7 @@
     using Http.Configuration;
     using Http.Models.Cookies;
     using Http.Models.Headers;
+    using Http.Models.Session;
 
     public class HttpRequest : IHttpRequest
     {
@@ -150,5 +151,7 @@
         public IHttpHeaderCollection Headers { get; }
 
         public IHttpCookieCollection Cookies { get; }
+
+        public IHttpSession Session { get; set; }
     }
 }
