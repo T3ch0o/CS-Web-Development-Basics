@@ -4,16 +4,16 @@
 
     public class HttpHeaderCollection : IHttpHeaderCollection
     {
-        private readonly Dictionary<string, string> _headers = new Dictionary<string, string>();
+        private readonly Dictionary<string, HttpHeader> _headers = new Dictionary<string, HttpHeader>();
 
         public void Add(string name, string value)
         {
-            _headers.Add(name, value);
+            Add(new HttpHeader(name, value));
         }
 
         public void Add(HttpHeader header)
         {
-            Add(header.Name, header.Value);
+            _headers.Add(header.Name, header);
         }
 
         public bool ContainsHeader(string name)
@@ -23,9 +23,9 @@
 
         public bool TryGetHeader(string name, out HttpHeader? header)
         {
-            if (_headers.TryGetValue(name, out string value))
+            if (_headers.TryGetValue(name, out HttpHeader value))
             {
-                header = new HttpHeader(name, value);
+                header = value;
                 return true;
             }
 
@@ -35,7 +35,7 @@
 
         public override string ToString()
         {
-            return string.Join("\r\n", _headers);
+            return string.Join("\r\n", _headers.Values);
         }
     }
 }
