@@ -1,6 +1,7 @@
 ﻿namespace Http.Models.Cookies
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     public class HttpCookieCollection : IHttpCookieCollection
     {
@@ -28,7 +29,7 @@
 
         public override string ToString()
         {
-            return string.Join("; ", _cookies.Values);
+            return string.Join("; ", _cookies.Values.Where(cookie => cookie.IsNew));
         }
     }
 }
