@@ -2,11 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     using Http.Models;
     using Http.Models.Requests;
     using Http.Models.Responses;
+
+    using WebServer.Results;
 
     public class ServerRoutingTable
     {
@@ -36,6 +39,13 @@
                 {
                     return handler(request);
                 }
+            }
+
+            string resourcePath = string.Concat("../Resources/", request.Path);
+
+            if (File.Exists(resourcePath))
+            {
+                return new InlineResourceResult(File.ReadAllBytes(resourcePath), HttpStatusCode.OK);
             }
 
             return new HttpResponse(HttpStatusCode.NotFound);
