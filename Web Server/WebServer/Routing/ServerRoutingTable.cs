@@ -9,9 +9,10 @@
     using Http.Models.Requests;
     using Http.Models.Responses;
 
+    using WebServer.Api;
     using WebServer.Results;
 
-    public class ServerRoutingTable
+    public class ServerRoutingTable : IHttpHandler
     {
         private readonly Dictionary<HttpRequestMethod, Dictionary<string, Func<IHttpRequest, IHttpResponse>>> _routes;
 
@@ -31,7 +32,7 @@
             _routes[httpRequestMethod][path] = handler;
         }
 
-        public IHttpResponse HandleRequest(IHttpRequest request)
+        public IHttpResponse Handle(IHttpRequest request)
         {
             if (_routes.TryGetValue(request.Method, out var pathRoutes)) // PathRoutes is inner path dictionary
             {

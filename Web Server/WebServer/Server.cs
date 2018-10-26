@@ -5,21 +5,21 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using WebServer.Routing;
+    using WebServer.Api;
 
     public class Server
     {
         private const string ServerIp = "127.0.0.1";
 
-        private readonly ServerRoutingTable _serverRoutingTable;
+        private readonly IHttpHandler _httpHandler;
 
         private readonly TcpListener _tcpListener;
 
         private readonly CancellationToken _cancellationToken = new CancellationToken();
 
-        public Server(int port, ServerRoutingTable serverRoutingTable)
+        public Server(int port, IHttpHandler httpHandler)
         {
-            _serverRoutingTable = serverRoutingTable;
+            _httpHandler = httpHandler;
             _tcpListener = new TcpListener(IPAddress.Parse(ServerIp), port);
         }
 
@@ -35,7 +35,7 @@
             {
                 Socket clientSocket = await _tcpListener.AcceptSocketAsync();
 
-                ConnectionHandler connectionHandler = new ConnectionHandler(clientSocket, _serverRoutingTable);
+                ConnectionHandler connectionHandler = new ConnectionHandler(clientSocket, _httpHandler);
                 Task.Run(connectionHandler.ProcessRequestAsync, cancellationToken);
             }
         }

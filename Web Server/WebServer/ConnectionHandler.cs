@@ -11,7 +11,7 @@
     using Http.Models.Responses;
     using Http.Models.Session;
 
-    using WebServer.Routing;
+    using WebServer.Api;
 
     public class ConnectionHandler
     {
@@ -19,12 +19,12 @@
 
         private readonly Socket _clientSocket;
 
-        private readonly ServerRoutingTable _serverRoutingTable;
+        private readonly IHttpHandler _handler;
 
-        public ConnectionHandler(Socket clientSocket, ServerRoutingTable serverRoutingTable)
+        public ConnectionHandler(Socket clientSocket, IHttpHandler handler)
         {
             _clientSocket = clientSocket;
-            _serverRoutingTable = serverRoutingTable;
+            _handler = handler;
         }
 
         public async Task ProcessRequestAsync()
@@ -37,7 +37,7 @@
 
                 string sessionId = SetRequestSession(request);
 
-                response = _serverRoutingTable.HandleRequest(request);
+                response = _handler.Handle(request);
 
                 SetResponseSession(response, sessionId);
             }
