@@ -1,15 +1,22 @@
 ﻿namespace Demo.Controllers
 {
-    using Http.Models;
+    using Demo.Attributes;
+
     using Http.Models.Responses;
 
-    using WebServer.Results;
-
-    public class HomeController
+    public class HomeController : ControllerBase
     {
+        [HttpGet("/")]
+        [HttpGet("/home/index")]
         public IHttpResponse Index()
         {
-            return new HtmlResult("<h1>Hello World!</h1>", HttpStatusCode.OK);
+            if (IsAuthenticated)
+            {
+                ViewPropertyBag["username"] = Request.Session.GetParameter<string>("username");
+                return View("Views/Home/IndexLoggedIn");
+            }
+
+            return View("Views/Home/Index");
         }
     }
 }
