@@ -1,8 +1,8 @@
 ﻿namespace Http.Extensions
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
-        internal static string Capitalize(this string value)
+        public static string Capitalize(this string value)
         {
             if (value.Length == 0)
             {
