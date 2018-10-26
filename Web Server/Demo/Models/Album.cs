@@ -11,6 +11,6 @@
 
         public decimal Price => Tracks.Sum(track => track.Price);
 
-        public ICollection<Track> Tracks { get; } = new HashSet<Track>();
+        public virtual ICollection<Track> Tracks { get; } = new HashSet<Track>();
     }
 }
