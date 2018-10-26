@@ -117,11 +117,15 @@
             {
                 int formDataLineIndex = lastLineIndex + 1;
 
-                if (requestLines.Length > formDataLineIndex + 1)
+                if (requestLines.Length > formDataLineIndex)
                 {
                     string formDataLine = requestLines[formDataLineIndex];
 
-                    formData = new Dictionary<string, object>(formDataLine.Split('&').Select(ParseQueryString));
+                    if (formDataLine != string.Empty)
+                    {
+                        formData = new Dictionary<string, object>(formDataLine.Split('&')
+                                                                              .Select(ParseQueryString));
+                    }
                 }
             }
 
