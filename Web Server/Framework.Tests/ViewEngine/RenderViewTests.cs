@@ -30,8 +30,9 @@ namespace Framework.Tests.ViewEngine
                 ["Value"] = value
             };
 
-            Assert.That(() => engine.RenderView(string.Empty, string.Empty, propertyBag),
-                        Is.EqualTo($"<html><head></head><body><h1>{value}</h1></body>"));
+            string renderedHtml = engine.RenderView(string.Empty, string.Empty, propertyBag);
+
+            Assert.That(renderedHtml, Is.EqualTo($"<html><head></head><body><h1>{value}</h1></body>"));
         }
 
         [Test]
@@ -114,7 +115,7 @@ namespace Framework.Tests.ViewEngine
             {
                 if (viewPath.EndsWith("DisplayTemplate.html"))
                 {
-                    return "<div>\r\n<h1>@Model.Title</h1>\r\n<hr/>\r\n<hr/>\r\n<h2>@Model.Type</h2>\r\n<h2>@Model.Count</h2>\r\n</div>";
+                    return "<div><h1>@Model.Title</h1><hr/><hr/><h2>@Model.Type</h2><h2>@Model.Count</h2><div>@Model.SomeOtherProperty</div></div>";
                 }
 
                 return "<section>@Model.Value</section>";
@@ -125,8 +126,9 @@ namespace Framework.Tests.ViewEngine
                 ["Value"] = new ComplexType(title, type, count)
             };
 
-            Assert.That(() => engine.RenderView(string.Empty, string.Empty, propertyBag),
-                              Is.EqualTo($"<section><div>\r\n<h1>{title}</h1>\r\n<hr/>\r\n<hr/>\r\n<h2>{type}</h2>\r\n<h2>{count}</h2>\r\n</div></section>"));
+            string renderedHtml = engine.RenderView(string.Empty, string.Empty, propertyBag);
+
+            Assert.That(renderedHtml, Is.EqualTo($"<section><div><h1>{title}</h1><hr/><hr/><h2>{type}</h2><h2>{count}</h2><div>null</div></div></section>"));
         }
 
         private class ComplexType
@@ -143,6 +145,13 @@ namespace Framework.Tests.ViewEngine
             public string Type { get; }
 
             public int Count { get; }
+
+            public OtherType SomeOtherProperty { get; }
+        }
+
+        private class OtherType
+        {
+            public string Value { get; } = "SomeString";
         }
     }
 }
