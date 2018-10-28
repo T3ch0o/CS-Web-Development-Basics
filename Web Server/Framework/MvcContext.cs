@@ -2,12 +2,6 @@
 {
     public class MvcContext
     {
-        private MvcContext()
-        {
-        }
-
-        public static MvcContext Instance { get; } = new MvcContext();
-
         public string AssemblyName { get; set; }
 
         public string ControllersNamespace { get; set; }
