@@ -15,7 +15,7 @@
 
         public void AddParameter<T>(string name, T parameter)
         {
-            _parameters.Add(name, parameter);
+            _parameters[name] = parameter;
         }
 
         public void ClearParameters()
