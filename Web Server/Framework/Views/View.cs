@@ -1,19 +1,19 @@
-﻿namespace Framework.ActionResults
+﻿namespace Framework.Views
 {
-    using System.IO;
+    using Framework.ActionResults;
 
     public class View : IRenderable
     {
-        private readonly string _templateName;
+        private readonly string _content;
 
-        public View(string templateName)
+        public View(string content)
         {
-            _templateName = templateName;
+            _content = content;
         }
 
         public string Render()
         {
-            return File.ReadAllText(_templateName);
+            return _content;
         }
     }
 }
