@@ -47,7 +47,9 @@
             if (targetMethod != null)
             {
                 Controller controller = (Controller)Activator.CreateInstance(controllerType);
+
                 controller.Request = request;
+                controller.MvcContext = _mvcContext;
 
                 if (targetMethod.GetCustomAttributes<AuthorizeAttribute>()
                                 .Any(attribute => !attribute.IsAuthorized(controller.Identity)))
