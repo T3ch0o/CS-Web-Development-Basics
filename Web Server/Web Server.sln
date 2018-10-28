@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "Framework\Fram
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkTest", "FrameworkTest\FrameworkTest.csproj", "{123A71A1-56EA-42AB-A176-54D5B31CF193}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Tests", "Framework.Tests\Framework.Tests.csproj", "{2DE991A6-1739-4D64-92EB-39077A5BAA41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{123A71A1-56EA-42AB-A176-54D5B31CF193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{123A71A1-56EA-42AB-A176-54D5B31CF193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{123A71A1-56EA-42AB-A176-54D5B31CF193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
