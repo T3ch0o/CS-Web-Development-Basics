@@ -8,7 +8,7 @@
     {
         private static async Task Main()
         {
-            await WebHost.Start(new Startup());
+            await WebHost.Start<Startup>();
         }
     }
 }
