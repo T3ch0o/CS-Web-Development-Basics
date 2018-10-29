@@ -6,7 +6,7 @@
     {
         void RegisterDependency<TImplementation>();
 
-        void RegisterDependency<TService, TImplementation>() where TService : TImplementation;
+        void RegisterDependency<TService, TImplementation>() where TImplementation : TService;
 
         T CreateInstance<T>();
 

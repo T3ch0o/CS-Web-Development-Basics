@@ -14,7 +14,7 @@
             RegisterDependency<TImplementation, TImplementation>();
         }
 
-        public void RegisterDependency<TService, TImplementation>() where TService : TImplementation
+        public void RegisterDependency<TService, TImplementation>() where TImplementation : TService
         {
             _dependencies[typeof(TService)] = typeof(TImplementation);
         }
