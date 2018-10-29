@@ -31,12 +31,13 @@
         {
             TStartup mvcApplication = new TStartup();
 
-            IDependencyContainer container = new DependencyContainer();
+            mvcApplication.Configure();
+
+            DependencyContainer container = new DependencyContainer();
             mvcApplication.ConfigureServices(container);
 
             ControllerRouter controllerRouter = new ControllerRouter(mvcContext);
             ResourceRouter resourceRouter = new ResourceRouter();
-            mvcApplication.Configure();
 
             Server server = new Server(Port, controllerRouter, resourceRouter);
 
