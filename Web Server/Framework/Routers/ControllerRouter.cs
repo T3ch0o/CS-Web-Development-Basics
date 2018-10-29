@@ -33,10 +33,21 @@
 
         public IHttpResponse Handle(IHttpRequest request)
         {
-            string[] pathParts = request.Path.ToLower().Split('/', StringSplitOptions.RemoveEmptyEntries);
+            string controllerName;
+            string actionName;
 
-            string controllerName = pathParts.First().Capitalize();
-            string actionName = pathParts.Last().Capitalize();
+            if (request.Path == "/")
+            {
+                controllerName = "Home";
+                actionName = "Index";
+            }
+            else
+            {
+                string[] pathParts = request.Path.ToLower().Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+                controllerName = pathParts.First().Capitalize();
+                actionName = pathParts.Last().Capitalize();
+            }
 
             string controllerAssemblyQualifiedName = string.Concat(_mvcContext.AssemblyName, ".", _mvcContext.ControllersNamespace, ".", controllerName, _mvcContext.ControllersSuffix, ", ", _mvcContext.AssemblyName);
 
