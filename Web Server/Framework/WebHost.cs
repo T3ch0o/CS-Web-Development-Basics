@@ -11,7 +11,7 @@
 
     public static class WebHost
     {
-        private const int Port = 8000;
+        private const int Port = 80;
 
         public static async Task Start(IMvcApplication mvcApplication)
         {
@@ -33,9 +33,10 @@
             mvcApplication.ConfigureServices(container);
 
             ControllerRouter controllerRouter = new ControllerRouter(mvcContext);
+            ResourceRouter resourceRouter = new ResourceRouter();
             mvcApplication.Configure();
 
-            Server server = new Server(Port, controllerRouter);
+            Server server = new Server(Port, controllerRouter, resourceRouter);
 
             await server.Run();
         }

@@ -11,15 +11,18 @@
     {
         private const string ServerIp = "127.0.0.1";
 
-        private readonly IHttpHandler _httpHandler;
+        private readonly IHttpHandler _controllerHandler;
+
+        private readonly IHttpHandler _resourceHandler;
 
         private readonly TcpListener _tcpListener;
 
         private readonly CancellationToken _cancellationToken = new CancellationToken();
 
-        public Server(int port, IHttpHandler httpHandler)
+        public Server(int port, IHttpHandler controllerHandler, IHttpHandler resourceHandler)
         {
-            _httpHandler = httpHandler;
+            _controllerHandler = controllerHandler;
+            _resourceHandler = resourceHandler;
             _tcpListener = new TcpListener(IPAddress.Parse(ServerIp), port);
         }
 
@@ -35,7 +38,7 @@
             {
                 Socket clientSocket = await _tcpListener.AcceptSocketAsync();
 
-                ConnectionHandler connectionHandler = new ConnectionHandler(clientSocket, _httpHandler);
+                ConnectionHandler connectionHandler = new ConnectionHandler(clientSocket, _controllerHandler, _resourceHandler);
                 Task.Run(connectionHandler.ProcessRequestAsync, cancellationToken);
             }
         }

@@ -19,12 +19,15 @@
 
         private readonly Socket _clientSocket;
 
-        private readonly IHttpHandler _handler;
+        private readonly IHttpHandler _controllerHandler;
 
-        public ConnectionHandler(Socket clientSocket, IHttpHandler handler)
+        private readonly IHttpHandler _resourceHandler;
+
+        public ConnectionHandler(Socket clientSocket, IHttpHandler controllerHandler, IHttpHandler resourceHandler )
         {
             _clientSocket = clientSocket;
-            _handler = handler;
+            _controllerHandler = controllerHandler;
+            _resourceHandler = resourceHandler;
         }
 
         public async Task ProcessRequestAsync()
@@ -37,15 +40,22 @@
 
                 string sessionId = SetRequestSession(request);
 
-                response = _handler.Handle(request);
+                if (request.Path.Contains("/Resources"))
+                {
+                    response = _resourceHandler.Handle(request);
+                }
+                else
+                {
+                    response = _controllerHandler.Handle(request);
+                }
 
                 SetResponseSession(response, sessionId);
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
                 response = new HttpResponse(HttpStatusCode.BadRequest);
             }
-            catch
+            catch (Exception e)
             {
                 response = new HttpResponse(HttpStatusCode.InternalServerError);
             }
