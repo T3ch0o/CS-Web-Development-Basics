@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes", "IRunes\IRunes.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "Framework\Framework.csproj", "{5BD22DEC-9929-4618-BDD4-D565DFFEBBCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrameworkTest", "FrameworkTest\FrameworkTest.csproj", "{123A71A1-56EA-42AB-A176-54D5B31CF193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrameworkTest", "FrameworkTest\FrameworkTest.csproj", "{123A71A1-56EA-42AB-A176-54D5B31CF193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Tests", "Framework.Tests\Framework.Tests.csproj", "{2DE991A6-1739-4D64-92EB-39077A5BAA41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Tests", "Framework.Tests\Framework.Tests.csproj", "{2DE991A6-1739-4D64-92EB-39077A5BAA41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TORSHIA", "TORSHIA\TORSHIA.csproj", "{95E715DF-F970-4156-B13C-DBB7BB759A9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DE991A6-1739-4D64-92EB-39077A5BAA41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E715DF-F970-4156-B13C-DBB7BB759A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E715DF-F970-4156-B13C-DBB7BB759A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E715DF-F970-4156-B13C-DBB7BB759A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E715DF-F970-4156-B13C-DBB7BB759A9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
