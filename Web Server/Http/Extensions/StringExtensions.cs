@@ -1,9 +1,16 @@
 ﻿namespace Http.Extensions
 {
+    using System;
+
     public static class StringExtensions
     {
         public static string Capitalize(this string value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), "Null value passed to capitalize extension");
+            }
+
             if (value.Length == 0)
             {
                 return value;
