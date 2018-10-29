@@ -5,7 +5,7 @@
 
     internal class HomeController : Controller
     {
-        IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
