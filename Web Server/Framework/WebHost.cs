@@ -13,7 +13,7 @@
     {
         private const int Port = 80;
 
-        public static async Task Start(IMvcApplication mvcApplication)
+        public static async Task Start<TStartup>() where TStartup : IMvcApplication, new()
         {
             MvcContext mvcContext = new MvcContext
             {
@@ -24,11 +24,13 @@
                 ModelsFolder = "Models"
             };
 
-            await Start(mvcApplication, mvcContext);
+            await Start<TStartup>(mvcContext);
         }
 
-        public static async Task Start(IMvcApplication mvcApplication, MvcContext mvcContext)
+        public static async Task Start<TStartup>(MvcContext mvcContext) where TStartup : IMvcApplication, new()
         {
+            TStartup mvcApplication = new TStartup();
+
             IDependencyContainer container = new DependencyContainer();
             mvcApplication.ConfigureServices(container);
 
