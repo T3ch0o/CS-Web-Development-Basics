@@ -1,6 +1,6 @@
 ﻿namespace Torshia.Models
 {
-    internal enum Sector
+    public enum Sector
     {
         Customers,
         Marketing,

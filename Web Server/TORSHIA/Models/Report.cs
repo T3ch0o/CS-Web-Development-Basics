@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    internal class Report : IdObject
+    public class Report : IdObject
     {
         public Status Status { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Torshia.Models
 {
-    internal enum Status
+    public enum Status
     {
         Completed,
         Archived
