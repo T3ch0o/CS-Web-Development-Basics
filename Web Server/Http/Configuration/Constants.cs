@@ -1,7 +1,7 @@
 ﻿namespace Http.Configuration
 {
-    public static class Constants
+    internal static class Constants
     {
-        public const string HttpProtocolVersion = "HTTP/1.1";
+        internal const string HttpProtocolVersion = "HTTP/1.1";
     }
 }
