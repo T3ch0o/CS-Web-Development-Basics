@@ -13,7 +13,7 @@
     {
         public IHttpResponse Handle(IHttpRequest request)
         {
-            string resourcePath = string.Concat("../Resources/", request.Path);
+            string resourcePath = request.Path.TrimStart('/', '\\');
 
             if (File.Exists(resourcePath))
             {
