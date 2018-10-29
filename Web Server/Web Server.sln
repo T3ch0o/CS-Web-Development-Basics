@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Http", "Http\Http.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer", "WebServer\WebServer.csproj", "{52C3F1F6-52D1-4C50-B597-07278C71CA0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes", "Demo\IRunes.csproj", "{410EFAF8-275D-4005-8F03-B35DF1622D32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRunes", "IRunes\IRunes.csproj", "{410EFAF8-275D-4005-8F03-B35DF1622D32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "Framework\Framework.csproj", "{5BD22DEC-9929-4618-BDD4-D565DFFEBBCE}"
 EndProject
