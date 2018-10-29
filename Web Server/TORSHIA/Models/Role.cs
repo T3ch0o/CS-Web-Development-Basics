@@ -1,6 +1,6 @@
 ﻿namespace Torshia.Models
 {
-    internal enum Role
+    public enum Role
     {
         User,
         Admin

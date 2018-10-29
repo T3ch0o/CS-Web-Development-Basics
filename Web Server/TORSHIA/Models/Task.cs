@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    internal class Task : IdObject
+    public class Task : IdObject
     {
         public string Title { get; set; }
 

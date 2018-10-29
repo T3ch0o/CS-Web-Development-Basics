@@ -1,6 +1,6 @@
 ﻿namespace Torshia.Models
 {
-    internal class User : IdObject
+    public class User : IdObject
     {
         public string Username { get; set; }
 
