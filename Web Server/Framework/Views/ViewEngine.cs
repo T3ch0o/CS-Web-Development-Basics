@@ -22,18 +22,22 @@
 
         private readonly string _sharedViewsFolderPath;
 
+        private readonly string _viewsFolderPath;
+
         private readonly Regex _viewCollectionTemplateRegex = new Regex($@"\@Model\.Collection\.(?<{CollectionNameGroup}>\w+)\((?<{ItemTemplateGroup}>.+)\)");
+
 
         public ViewEngine(MvcContext mvcContext, IViewReader viewReader)
         {
             _viewReader = viewReader;
             _sharedViewsFolderPath = Path.Combine(mvcContext.ViewsFolder, "Shared");
+            _viewsFolderPath = mvcContext.ViewsFolder;
         }
 
         public string RenderView(string controller, string action, IDictionary<string, object> propertyBag)
         {
             string layoutViewPath = Path.Combine(_sharedViewsFolderPath, "_Layout.html");
-            string controllerViewPath = Path.Combine(_sharedViewsFolderPath, controller, string.Concat(action, ".html"));
+            string controllerViewPath = Path.Combine(_viewsFolderPath, controller, string.Concat(action, ".html"));
 
             StringBuilder layoutViewBuilder = new StringBuilder(_viewReader.ReadView(layoutViewPath));
             string controllerView = _viewReader.ReadView(controllerViewPath);
