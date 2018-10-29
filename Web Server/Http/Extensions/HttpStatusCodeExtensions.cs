@@ -2,9 +2,9 @@
 {
     using Http.Models;
 
-    public static class HttpStatusCodeExtensions
+    internal static class HttpStatusCodeExtensions
     {
-        public static string ToHttpFormat(this HttpStatusCode httpStatusCode)
+        internal static string ToHttpFormat(this HttpStatusCode httpStatusCode)
         {
             return string.Concat((int)httpStatusCode, " ", httpStatusCode);
         }
