@@ -22,8 +22,6 @@
 
     public class ControllerRouter : IHttpHandler
     {
-        private readonly ResourceRouter _resourceRouter = new ResourceRouter();
-
         private readonly MvcContext _mvcContext;
 
         public ControllerRouter(MvcContext mvcContext)
@@ -92,7 +90,7 @@
                 }
             }
 
-            return _resourceRouter.Handle(request);
+            return new HttpResponse(HttpStatusCode.NotFound);
         }
 
         private static MethodInfo FindMethod(Type controllerType, string actionName, HttpRequestMethod requestMethod)
