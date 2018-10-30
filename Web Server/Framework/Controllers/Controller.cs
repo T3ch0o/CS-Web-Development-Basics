@@ -17,7 +17,7 @@
 
         public IHttpRequest Request { protected get; set; }
 
-        public IIdentity Identity => (IIdentity)Request.Session.GetParameter("auth");
+        public IIdentity Identity => Request.Session.ContainsParameter("auth") ? (IIdentity)Request.Session.GetParameter("auth") : null;
 
         public Model ModelState { get; } = new Model();
 
