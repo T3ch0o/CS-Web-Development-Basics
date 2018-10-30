@@ -8,25 +8,30 @@
     [AttributeUsage(AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute
     {
-        private readonly string _role;
+        private readonly string[] _roles;
 
         public AuthorizeAttribute()
         {
         }
 
-        public AuthorizeAttribute(string role)
+        public AuthorizeAttribute(params string[] roles)
         {
-            _role = role;
+            _roles = roles;
         }
 
         public bool IsAuthorized(IIdentity user)
         {
-            if (_role == null)
+            if (_roles.Length == 0)
             {
                 return user != null;
             }
 
-            return user.Roles.Contains(_role);
+            if (user != null)
+            {
+                return _roles.Contains(user.Role);
+            }
+
+            return false;
         }
     }
 }
