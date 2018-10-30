@@ -25,7 +25,7 @@
 
         protected IDictionary<string, object> PropertyBag { get; } = new Dictionary<string, object>();
 
-        protected IViewable View([CallerMemberName] string actionName = default)
+        protected virtual IViewable View([CallerMemberName] string actionName = default)
         {
             string controllerName = GetType().Name.Replace(MvcContext.ControllersSuffix, string.Empty);
 
