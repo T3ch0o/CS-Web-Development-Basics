@@ -36,7 +36,7 @@
             DependencyContainer container = new DependencyContainer();
             mvcApplication.ConfigureServices(container);
 
-            ControllerRouter controllerRouter = new ControllerRouter(mvcContext);
+            ControllerRouter controllerRouter = new ControllerRouter(mvcContext, container);
             ResourceRouter resourceRouter = new ResourceRouter();
 
             Server server = new Server(Port, controllerRouter, resourceRouter);
