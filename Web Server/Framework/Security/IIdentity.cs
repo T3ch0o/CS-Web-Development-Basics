@@ -12,6 +12,6 @@
 
         bool IsValid { get; set; }
 
-        IEnumerable<string> Roles { get; set; }
+        string Role { get; set; }
     }
 }
