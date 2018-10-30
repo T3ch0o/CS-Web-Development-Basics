@@ -27,12 +27,15 @@
     {
         private readonly MvcContext _mvcContext;
 
+        private readonly ViewEngine _viewEngine;
+
         private readonly IDependencyContainer _dependencyContainer;
 
         public ControllerRouter(MvcContext mvcContext, IDependencyContainer dependencyContainer)
         {
             _mvcContext = mvcContext;
             _dependencyContainer = dependencyContainer;
+            _viewEngine = new ViewEngine(mvcContext, new ViewReader());
         }
 
         public IHttpResponse Handle(IHttpRequest request)
@@ -57,16 +60,27 @@
 
             Type controllerType = Type.GetType(controllerAssemblyQualifiedName);
 
+            if (controllerType == null)
+            {
+                return RenderNotFound(request);
+            }
+
             MethodInfo targetMethod = FindMethod(controllerType, actionName, request.Method);
 
-            if (targetMethod != null)
+            if (targetMethod == null)
+            {
+                return RenderNotFound(request);
+            }
+            else
             {
                 Controller controller = (Controller)_dependencyContainer.CreateInstance(controllerType);
 
+                controller.ViewEngine = _viewEngine;
                 controller.Request = request;
                 controller.MvcContext = _mvcContext;
 
-                if (targetMethod.GetCustomAttributes<AuthorizeAttribute>().Any(attribute => !attribute.IsAuthorized(controller.Identity)))
+                if (targetMethod.GetCustomAttributes<AuthorizeAttribute>()
+                                .Any(attribute => !attribute.IsAuthorized(controller.Identity)))
                 {
                     return new WebServer.Results.RedirectResult("/");
                 }
@@ -105,6 +119,7 @@
                         return new HtmlResult(result, HttpStatusCode.OK);
                 }
             }
+
             return new HttpResponse(HttpStatusCode.NotFound);
         }
 
@@ -169,6 +184,16 @@
             }
 
             return true;
+        }
+
+        private HtmlResult RenderNotFound(IHttpRequest request)
+        {
+            if (request.Session.ContainsParameter("auth"))
+            {
+                return new HtmlResult(_viewEngine.RenderError("404 NotFound", ((IIdentity)request.Session.GetParameter("auth")).Role), HttpStatusCode.NotFound);
+            }
+
+            return new HtmlResult(_viewEngine.RenderError("404 NotFound", "Guest"), HttpStatusCode.NotFound);
         }
     }
 }
