@@ -24,6 +24,6 @@
 
         public virtual bool IsValid { get; set; }
 
-        public virtual IEnumerable<string> Roles { get; set; }
+        public virtual string Role { get; set; }
     }
 }
