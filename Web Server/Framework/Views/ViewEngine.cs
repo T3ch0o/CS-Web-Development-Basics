@@ -42,7 +42,13 @@
             StringBuilder layoutViewBuilder = new StringBuilder(_viewReader.ReadView(layoutViewPath));
             string controllerView = _viewReader.ReadView(controllerViewPath);
 
-            layoutViewBuilder.Replace("@Body()", controllerView);
+            layoutViewBuilder.Replace("@RenderBody()", controllerView).Replace("@RenderError()", string.Empty);
+
+            if (propertyBag.ContainsKey("role"))
+            {
+                string role = propertyBag["role"].ToString();
+                SetNavigationBar(layoutViewBuilder, role);
+            }
 
             if (propertyBag.Count == 0)
             {
@@ -57,15 +63,27 @@
             return layoutViewBuilder.ToString();
         }
 
-        public string RenderError(string error)
+        private void SetNavigationBar(StringBuilder layoutViewBuilder, string role)
         {
-            string errorViewPath = string.Concat(_sharedViewsFolderPath, "_Error.html");
-            string layoutViewPath = string.Concat(_sharedViewsFolderPath, "_Layout.html");
+            string navigationBarViewPath = Path.Combine(_sharedViewsFolderPath, $"_{role}NavigationBar.html");
 
-            string layoutView = _viewReader.ReadView(layoutViewPath);
+            layoutViewBuilder.Replace("@NavigationBar()", _viewReader.ReadView(navigationBarViewPath));
+        }
+
+        public string RenderError(string error, string role)
+        {
+            string errorViewPath = Path.Combine(_sharedViewsFolderPath, "_Error.html");
+            string layoutViewPath = Path.Combine(_sharedViewsFolderPath, "_Layout.html");
+
+            StringBuilder layoutViewBuilder = new StringBuilder(_viewReader.ReadView(layoutViewPath));
             string errorView = _viewReader.ReadView(errorViewPath);
 
-            return layoutView.Replace("@Error()", errorView.Replace("@Error", error));
+            SetNavigationBar(layoutViewBuilder, role);
+
+            return layoutViewBuilder
+                   .Replace("@RenderError()", errorView.Replace("@Error", error))
+                   .Replace("@RenderBody()", string.Empty)
+                   .ToString();
         }
 
         private void ReplaceParameterInTemplate(StringBuilder templateBuilder, string parameterName, object parameter)
