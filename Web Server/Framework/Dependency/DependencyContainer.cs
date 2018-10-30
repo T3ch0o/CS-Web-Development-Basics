@@ -33,7 +33,7 @@
                 throw new ArgumentException($"Abstract type '{instanceType.FullName}' cannot be instantiated", nameof(type));
             }
 
-            ConstructorInfo targetConstructor = instanceType.GetConstructors(BindingFlags.Public)
+            ConstructorInfo targetConstructor = instanceType.GetConstructors(BindingFlags.Public | BindingFlags.Instance)
                                                             .FirstOrDefault();
 
             if (targetConstructor == null)
