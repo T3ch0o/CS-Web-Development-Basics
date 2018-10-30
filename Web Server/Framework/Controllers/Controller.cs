@@ -13,25 +13,15 @@
 
     public class Controller
     {
-        private IViewEngine _viewEngine;
-
-        private MvcContext _mvcContext;
-        public MvcContext MvcContext
-        {
-            protected get => _mvcContext;
-
-            set
-            {
-                _mvcContext = value;
-                _viewEngine = new ViewEngine(value, new ViewReader());
-            }
-        }
+        public MvcContext MvcContext { protected get; set; }
 
         public IHttpRequest Request { protected get; set; }
 
         public IIdentity Identity => (IIdentity)Request.Session.GetParameter("auth");
 
         public Model ModelState { get; } = new Model();
+
+        public IViewEngine ViewEngine { private get; set; }
 
         protected IDictionary<string, object> PropertyBag { get; } = new Dictionary<string, object>();
 
@@ -43,11 +33,11 @@
 
             try
             {
-                viewContent = _viewEngine.RenderView(controllerName, actionName, PropertyBag);
+                viewContent = ViewEngine.RenderView(controllerName, actionName, PropertyBag);
             }
             catch (Exception e)
             {
-                viewContent = _viewEngine.RenderError(e.Message);
+                viewContent = ViewEngine.RenderError(e.Message, PropertyBag["role"].ToString());
             }
 
             return new ViewResult(new View(viewContent));
