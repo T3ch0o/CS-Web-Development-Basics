@@ -38,25 +38,34 @@
             {
                 IHttpRequest request = await ReadRequest();
 
-                string sessionId = SetRequestSession(request);
-
-                if (request.Path.Contains("/Resources"))
+                if (request == null)
                 {
-                    response = _resourceHandler.Handle(request);
+                    response = new HttpResponse(HttpStatusCode.BadRequest);
                 }
                 else
                 {
-                    response = _controllerHandler.Handle(request);
-                }
+                    string sessionId = SetRequestSession(request);
 
-                SetResponseSession(response, sessionId);
+                    if (request.Path.Contains("/Resources") || request.Path.Contains('.'))
+                    {
+                        response = _resourceHandler.Handle(request);
+                    }
+                    else
+                    {
+                        response = _controllerHandler.Handle(request);
+                    }
+
+                    SetResponseSession(response, sessionId);
+                }
             }
             catch (ArgumentException e)
             {
+                Console.WriteLine("Bad Request Error\n{0}\n{1}\n", e.Message, e.StackTrace);
                 response = new HttpResponse(HttpStatusCode.BadRequest);
             }
             catch (Exception e)
             {
+                Console.WriteLine("Internal Server Error\n{0}\n{1}\n", e.Message,e.StackTrace);
                 response = new HttpResponse(HttpStatusCode.InternalServerError);
             }
 
@@ -82,7 +91,14 @@
                 }
             }
 
-            return HttpRequest.Parse(stringBuilder.ToString());
+            string request = stringBuilder.ToString();
+
+            if (string.IsNullOrWhiteSpace(request))
+            {
+                return null;
+            }
+
+            return HttpRequest.Parse(request);
         }
 
         private async Task SendResponse(IHttpResponse response)
