@@ -10,7 +10,10 @@
     using Framework.Attributes.Action;
     using Framework.Attributes.Property;
     using Framework.Controllers;
+    using Framework.Dependency;
     using Framework.Extensions;
+    using Framework.Security;
+    using Framework.Views;
 
     using Http.Extensions;
     using Http.Models;
@@ -24,9 +27,12 @@
     {
         private readonly MvcContext _mvcContext;
 
-        public ControllerRouter(MvcContext mvcContext)
+        private readonly IDependencyContainer _dependencyContainer;
+
+        public ControllerRouter(MvcContext mvcContext, IDependencyContainer dependencyContainer)
         {
             _mvcContext = mvcContext;
+            _dependencyContainer = dependencyContainer;
         }
 
         public IHttpResponse Handle(IHttpRequest request)
@@ -55,15 +61,14 @@
 
             if (targetMethod != null)
             {
-                Controller controller = (Controller)Activator.CreateInstance(controllerType);
+                Controller controller = (Controller)_dependencyContainer.CreateInstance(controllerType);
 
                 controller.Request = request;
                 controller.MvcContext = _mvcContext;
 
-                if (targetMethod.GetCustomAttributes<AuthorizeAttribute>()
-                                .Any(attribute => !attribute.IsAuthorized(controller.Identity)))
+                if (targetMethod.GetCustomAttributes<AuthorizeAttribute>().Any(attribute => !attribute.IsAuthorized(controller.Identity)))
                 {
-                    return new UnauthorizedResult();
+                    return new WebServer.Results.RedirectResult("/");
                 }
 
                 ParameterInfo[] parameters = targetMethod.GetParameters();
@@ -100,7 +105,6 @@
                         return new HtmlResult(result, HttpStatusCode.OK);
                 }
             }
-
             return new HttpResponse(HttpStatusCode.NotFound);
         }
 
@@ -138,7 +142,7 @@
             {
                 if (property.PropertyType.IsPrimitiveOrString())
                 {
-                    property.SetValue(instance, Convert.ChangeType(formData[property.Name], property.PropertyType));
+                    property.SetValue(instance, Convert.ChangeType(formData[property.Name.ToLower()], property.PropertyType));
                 }
                 else
                 {
