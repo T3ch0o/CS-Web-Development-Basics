@@ -6,6 +6,6 @@
     {
         string RenderView(string controller, string action, IDictionary<string, object> propertyBag);
 
-        string RenderError(string error);
+        string RenderError(string error, string role);
     }
 }
