@@ -1,34 +1,36 @@
 ﻿namespace Http.Models.Cookies
 {
     using System;
+    using System.Text;
 
     public class HttpCookie
     {
-        private const int DefaultExpiryOffsetDays = 3;
-
-        public HttpCookie(string name, string value, int expireOffsetDays = DefaultExpiryOffsetDays)
+        public HttpCookie(string name, string value, int expiryOffsetDays = 3, string path = "/", bool isHttpOnly = false, bool isSecure = false)
+            : this(name, value, DateTime.UtcNow.AddDays(expiryOffsetDays), path, isHttpOnly, isSecure)
         {
-            Name = name;
-            Value = value;
-            ExpiresAt = DateTime.UtcNow.AddDays(expireOffsetDays);
-            IsNew = true;
         }
 
-        public HttpCookie(string name, string value, DateTime expiresAt, bool isNew)
+        public HttpCookie(string name, string value, DateTime expiresAt, string path = "/", bool isHttpOnly = false, bool isSecure = false)
         {
             Name = name;
             Value = value;
             ExpiresAt = expiresAt;
-            IsNew = isNew;
+            Path = path;
+            IsHttpOnly = isHttpOnly;
+            IsSecure = isSecure;
         }
 
         public string Name { get; }
 
-        public string Value { get; private set; }
+        public string Value { get; set; }
 
-        public DateTime ExpiresAt { get; private set; }
+        public DateTime ExpiresAt { get; set; }
 
-        public bool IsNew { get; }
+        public string Path { get; set; }
+
+        public bool IsHttpOnly { get; set; }
+
+        public bool IsSecure { get; set; }
 
         public void Delete()
         {
@@ -38,7 +40,24 @@
 
         public override string ToString()
         {
-            return $"{Name}={Value}; Expires={ExpiresAt:R}; HttpOnly; Path=/";
+            string startingValue = $"{Name}={Value};Expires={ExpiresAt:R};Path={Path};";
+
+            StringBuilder stringBuilder = new StringBuilder(startingValue);
+
+            if (IsHttpOnly)
+            {
+                stringBuilder.Append("HttpOnly;");
+            }
+
+            if (IsSecure)
+            {
+                stringBuilder.Append("Secure;");
+            }
+
+            // Remove trailing semi-colon
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+
+            return stringBuilder.ToString();
         }
     }
 }
