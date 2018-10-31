@@ -53,8 +53,8 @@
 
         public void Delete()
         {
-            ExpiresAt = DateTime.UtcNow.AddDays(-1);
             Value = string.Empty;
+            ExpiresAt = DateTime.UtcNow.AddDays(-1);
         }
 
         public override string ToString()
