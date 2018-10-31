@@ -46,9 +46,9 @@
 
             stringBuilder.AppendFormat("{0} {1}\r\n{2}\r\n", Constants.HttpProtocolVersion, StatusCode.ToHttpFormat(), Headers);
 
-            if (Cookies.HasCookies())
+            foreach (HttpCookie cookie in Cookies)
             {
-                stringBuilder.AppendFormat("Set-Cookie: {0}\r\n", Cookies);
+                stringBuilder.AppendFormat("Set-Cookie: {0}\r\n", cookie);
             }
 
             stringBuilder.Append("\r\n");
