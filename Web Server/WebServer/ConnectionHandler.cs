@@ -44,7 +44,19 @@
                 }
                 else
                 {
-                    string sessionId = SetRequestSession(request);
+                    string sessionId;
+
+                    if (request.Cookies.Contains(HttpSessionStorage.SessionCookieKey))
+                    {
+                        HttpCookie cookie = request.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
+                        sessionId = cookie.Value;
+                        request.Session = HttpSessionStorage.GetSession(sessionId);
+                    }
+                    else
+                    {
+                        sessionId = Guid.NewGuid().ToString();
+                        request.Session = HttpSessionStorage.GetSession(sessionId);
+                    }
 
                     if (request.Path.Contains("/Resources") || request.Path.Contains('.'))
                     {
@@ -55,7 +67,7 @@
                         response = _controllerHandler.Handle(request);
                     }
 
-                    SetResponseSession(response, sessionId);
+                    response.Cookies.Add(new HttpCookie(HttpSessionStorage.SessionCookieKey, $"{sessionId};HttpOnly=true"));
                 }
             }
             catch (ArgumentException e)
@@ -105,30 +117,6 @@
         {
             Memory<byte> responseData = new Memory<byte>(response.FormResponseBytes());
             await _clientSocket.SendAsync(responseData, SocketFlags.None);
-        }
-
-        private string SetRequestSession(IHttpRequest httpRequest)
-        {
-            string sessionId;
-
-            if (httpRequest.Cookies.Contains(HttpSessionStorage.SessionCookieKey))
-            {
-                HttpCookie cookie = httpRequest.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
-                sessionId = cookie.Value;
-                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
-            }
-            else
-            {
-                sessionId = Guid.NewGuid().ToString();
-                httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
-            }
-
-            return sessionId;
-        }
-
-        private void SetResponseSession(IHttpResponse response, string sessionId)
-        {
-            response.Cookies.Add(new HttpCookie(HttpSessionStorage.SessionCookieKey, $"{sessionId};HttpOnly=true"));
         }
     }
 }
