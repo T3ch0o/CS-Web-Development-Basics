@@ -1,34 +1,73 @@
 ﻿namespace Http.Models.Cookies
 {
+    using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class HttpCookieCollection : IHttpCookieCollection
     {
         private readonly Dictionary<string, HttpCookie> _cookies = new Dictionary<string, HttpCookie>();
 
-        public void Add(HttpCookie cookie)
+        public int Count => _cookies.Count;
+
+        public bool IsReadOnly => false;
+
+        public bool HasCookies => Count > 0;
+
+        public HttpCookie this[string key] => _cookies[key];
+
+        public bool TryGetValue(string key, out HttpCookie value)
         {
-            _cookies[cookie.Name] = cookie;
+            bool containsCookie = _cookies.TryGetValue(key, out HttpCookie cookie);
+
+            value = cookie;
+            return containsCookie;
         }
 
-        public bool Contains(string name)
+        public IEnumerator<HttpCookie> GetEnumerator()
         {
-            return _cookies.ContainsKey(name);
+            return _cookies.Values.GetEnumerator();
         }
 
-        public HttpCookie GetCookie(string name)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return _cookies[name];
+            return GetEnumerator();
         }
 
-        public bool HasCookies()
+        public void Add(HttpCookie item)
         {
-            return _cookies.Count > 0;
+            _cookies.Add(item.Name, item);
         }
 
-        public override string ToString()
+        public void Clear()
         {
-            return string.Join("; ", _cookies.Values);
+            _cookies.Clear();
+        }
+
+        public bool Contains(HttpCookie item)
+        {
+            return _cookies.ContainsKey(item.Name);
+        }
+
+        public void CopyTo(HttpCookie[] array, int arrayIndex)
+        {
+            HttpCookie[] cookies = _cookies.Values.ToArray();
+
+            if (array.Length - arrayIndex < cookies.Length)
+            {
+                throw new ArgumentException("Array has insufficient capacity to store cookies", nameof(array));
+            }
+
+            foreach (HttpCookie cookie in cookies)
+            {
+                array[arrayIndex++] = cookie;
+            }
+        }
+
+        public bool Remove(HttpCookie item)
+        {
+            return _cookies.Remove(item.Name);
         }
     }
 }

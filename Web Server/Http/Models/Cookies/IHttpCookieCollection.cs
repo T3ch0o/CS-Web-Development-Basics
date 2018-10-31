@@ -1,13 +1,13 @@
 ﻿namespace Http.Models.Cookies
 {
-    public interface IHttpCookieCollection
+    using System.Collections.Generic;
+
+    public interface IHttpCookieCollection : ICollection<HttpCookie>
     {
-        void Add(HttpCookie cookie);
+        bool HasCookies { get; }
 
-        bool Contains(string name);
+        HttpCookie this[string key] { get; }
 
-        HttpCookie GetCookie(string name);
-
-        bool HasCookies();
+        bool TryGetValue(string key, out HttpCookie value);
     }
 }
