@@ -97,7 +97,7 @@
                 return Redirect("/");
             }
 
-            HttpCookie cookie = Request.Cookies.GetCookie("auth");
+            HttpCookie cookie = Request.Cookies["auth"];
             cookie.Delete();
 
             Request.Session.ClearParameters();
