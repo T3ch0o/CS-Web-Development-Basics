@@ -46,17 +46,16 @@
                 {
                     string sessionId;
 
-                    if (request.Cookies.Contains(HttpSessionStorage.SessionCookieKey))
+                    if (request.Cookies.TryGetValue(HttpSessionStorage.SessionCookieKey, out HttpCookie cookie))
                     {
-                        HttpCookie cookie = request.Cookies.GetCookie(HttpSessionStorage.SessionCookieKey);
                         sessionId = cookie.Value;
-                        request.Session = HttpSessionStorage.GetSession(sessionId);
                     }
                     else
                     {
                         sessionId = Guid.NewGuid().ToString();
-                        request.Session = HttpSessionStorage.GetSession(sessionId);
                     }
+
+                    request.Session = HttpSessionStorage.GetSession(sessionId);
 
                     if (request.Path.Contains("/Resources") || request.Path.Contains('.'))
                     {
