@@ -67,7 +67,7 @@
                         response = _controllerHandler.Handle(request);
                     }
 
-                    response.Cookies.Add(new HttpCookie(HttpSessionStorage.SessionCookieKey, $"{sessionId};HttpOnly=true"));
+                    response.Cookies.Add(new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId, isHttpOnly: true));
                 }
             }
             catch (ArgumentException e)
