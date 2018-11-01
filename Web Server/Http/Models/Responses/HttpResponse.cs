@@ -44,7 +44,12 @@
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendFormat("{0} {1}\r\n{2}\r\n", Constants.HttpProtocolVersion, StatusCode.ToHttpFormat(), Headers);
+            stringBuilder.AppendFormat("{0} {1}\r\n", Constants.HttpProtocolVersion, StatusCode.ToHttpFormat(), Headers);
+
+            foreach (HttpHeader header in Headers)
+            {
+                stringBuilder.AppendFormat("{0}: {1}\r\n", header.Name, header.Value);
+            }
 
             foreach (HttpCookie cookie in Cookies)
             {
