@@ -45,6 +45,11 @@
             _cookies.Clear();
         }
 
+        public bool Contains(string name)
+        {
+            return _cookies.ContainsKey(name);
+        }
+
         public bool Contains(HttpCookie item)
         {
             return _cookies.ContainsKey(item.Name);

@@ -8,6 +8,8 @@
 
         HttpCookie this[string key] { get; }
 
+        bool Contains(string name);
+
         bool TryGetValue(string key, out HttpCookie value);
     }
 }
