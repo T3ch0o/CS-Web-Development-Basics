@@ -29,17 +29,13 @@
         public async Task Run()
         {
             _tcpListener.Start();
-            await ListenLoop(_cancellationToken);
-        }
 
-        private async Task ListenLoop(CancellationToken cancellationToken)
-        {
             while (!_cancellationToken.IsCancellationRequested)
             {
                 Socket clientSocket = await _tcpListener.AcceptSocketAsync();
 
                 ConnectionHandler connectionHandler = new ConnectionHandler(clientSocket, _controllerHandler, _resourceHandler);
-                Task.Run(connectionHandler.ProcessRequestAsync, cancellationToken);
+                Task.Run(connectionHandler.ProcessRequestAsync, _cancellationToken);
             }
         }
     }
