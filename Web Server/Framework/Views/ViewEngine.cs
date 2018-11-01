@@ -164,12 +164,19 @@
 
                 foreach (object value in enumerable)
                 {
-                    if (!value.GetType().IsPrimitiveOrString())
+                    if (value.GetType().IsPrimitiveOrString())
                     {
-                        throw new ArgumentException("Collection parameter contains complex object.", nameof(parameter));
+                        collectionBuilder.Append(itemTemplate.Replace("@Item", value.ToString()));
+                        continue;
                     }
 
-                    collectionBuilder.Append(itemTemplate.Replace("@Item", value.ToString()));
+                    string typeName = value.GetType().Name;
+
+                    StringBuilder typeBuilder = new StringBuilder(itemTemplate.Replace("@Item", string.Concat("@Model.", typeName)));
+
+                    ReplaceParameterInTemplate(typeBuilder, typeName, value);
+
+                    collectionBuilder.Append(typeBuilder.ToString());
                 }
 
                 templateBuilder.Replace(enumerableMatch.Value, collectionBuilder.ToString());
