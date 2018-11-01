@@ -164,13 +164,15 @@
 
                 foreach (object value in enumerable)
                 {
-                    if (value.GetType().IsPrimitiveOrString())
+                    Type itemType = value.GetType();
+
+                    if (itemType.IsPrimitiveOrString())
                     {
                         collectionBuilder.Append(itemTemplate.Replace("@Item", value.ToString()));
                         continue;
                     }
 
-                    string typeName = value.GetType().Name;
+                    string typeName = itemType.Name;
 
                     StringBuilder typeBuilder = new StringBuilder(itemTemplate.Replace("@Item", string.Concat("@Model.", typeName)));
 
