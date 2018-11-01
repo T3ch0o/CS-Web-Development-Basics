@@ -1,13 +1,17 @@
 ﻿namespace Http.Models.Headers
 {
-    public interface IHttpHeaderCollection
+    using System.Collections.Generic;
+
+    public interface IHttpHeaderCollection : ICollection<HttpHeader>
     {
+        bool HasHeaders { get; }
+
+        HttpHeader this[string key] { get; }
+
         void Add(string name, string value);
 
-        void Add(HttpHeader header);
+        bool Contains(string header);
 
-        bool ContainsHeader(string name);
-
-        bool TryGetHeader(string name, out HttpHeader? header);
+        bool TryGetHeader(string key, out HttpHeader value);
     }
 }
