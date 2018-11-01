@@ -107,7 +107,7 @@
                 headers.Add(keyValuePair[0], keyValuePair[1]);
             }
 
-            if (!headers.ContainsHeader("Host"))
+            if (!headers.Contains("Host"))
             {
                 throw new ArgumentException("Host header not found", nameof(request));
             }
@@ -131,9 +131,9 @@
 
             HttpCookieCollection httpCookieCollection = new HttpCookieCollection();
 
-            if (headers.TryGetHeader("Cookie", out HttpHeader? header))
+            if (headers.TryGetHeader("Cookie", out HttpHeader header))
             {
-                foreach (string[] parts in header.Value.Value.Split("; ").Select(cookie => cookie.Split('=')))
+                foreach (string[] parts in header.Value.Split("; ").Select(cookie => cookie.Split('=')))
                 {
                     httpCookieCollection.Add(new HttpCookie(parts[0], parts[1]));
                 }
