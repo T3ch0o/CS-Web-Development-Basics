@@ -155,11 +155,13 @@
 
             foreach (PropertyInfo property in objectType.GetProperties())
             {
-                if (property.PropertyType.IsPrimitiveOrString())
+                string propertyName = property.Name.ToLower();
+
+                if (property.PropertyType.IsPrimitiveOrString() && formData.ContainsKey(propertyName))
                 {
-                    property.SetValue(instance, Convert.ChangeType(formData[property.Name.ToLower()], property.PropertyType));
+                    property.SetValue(instance, Convert.ChangeType(formData[propertyName], property.PropertyType));
                 }
-                else
+                else if (formData.ContainsKey(propertyName))
                 {
                     property.SetValue(instance, InstantiateAndFill(property.PropertyType, formData));
                 }
